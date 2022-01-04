@@ -14,7 +14,7 @@ firstChapter : Chapter x
 firstChapter =
     chapter "First Chapter"
         |> renderComponent
-            (el [] [ text "Hello" ])
+            (el [] <| text "Hello")
 
 
 main : Book ()
