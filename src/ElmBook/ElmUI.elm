@@ -6,8 +6,10 @@ module ElmBook.ElmUI exposing (Book, book, Chapter)
 
 -}
 
-import Element exposing (Element, layout)
+import Element exposing (Element, layout, layoutWith, noStaticStyleSheet)
+import ElmBook
 import ElmBook.Custom exposing (customBook)
+import ElmBook.ThemeOptions
 
 
 type alias Html state =
@@ -33,5 +35,22 @@ type alias Chapter state =
 {-| Replaces `ElmBook.book`
 -}
 book : String -> BookBuilder state
-book =
-    customBook (layout [])
+book title =
+    customBook
+        (layoutWith
+            { options = [ noStaticStyleSheet ]
+            }
+            []
+        )
+        title
+        |> ElmBook.withThemeOptions
+            -- By adding a blank layout element here,
+            -- all required global styles for elm-ui are loaded.
+            -- Then we can use `layoutWith noStaticStylesheet`
+            -- on subsequent calls and remove style conflicts.
+            [ ElmBook.ThemeOptions.globals
+                [ Element.text ""
+                    |> layout []
+                    |> Element.html
+                ]
+            ]
